@@ -51,6 +51,7 @@ jobs:
               name: context.workflow,
               detail_url: "${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}",
             });
+            console.log(check);
             return check.data.id;
 
       - run: echo test
