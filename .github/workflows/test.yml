@@ -45,6 +45,7 @@ jobs:
             });
 
       - id: start
+        if: ${{ always() }}
         run: |
           printf 'timestamp=%(%s)T\n' >> "${GITHUB_OUTPUT}"
 
@@ -52,6 +53,7 @@ jobs:
       - run: exit 1
 
       - id: result-message
+        if: ${{ always() }}
         run: |
           printf -v now '%(%s)T'
           duration=$((now - ${{ steps.start.outputs.timestamp }}))
