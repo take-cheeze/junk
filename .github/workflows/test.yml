@@ -45,45 +45,34 @@ jobs:
             });
 
       - id: start
+        if: ${{ always() }}
         run: |
           printf 'timestamp=%(%s)T\n' >> "${GITHUB_OUTPUT}"
 
       - run: echo test ; sleep 2
 
       - id: result-message
+        if: ${{ always() }}
         run: |
           printf -v now '%(%s)T'
           duration=$((now - ${{ steps.start.outputs.timestamp }}))
           echo "message=${duration}s" >> "${GITHUB_OUTPUT}"
 
       - uses: actions/github-script@v7
-        if: ${{ failure() }}
+        if: ${{ failure() || success() }}
         with:
           script: |
             await github.rest.repos.createCommitStatus({
               owner: context.repo.owner,
               repo: context.repo.repo,
               sha: "${{ steps.head.outputs.sha }}",
-              state: "failure",
+              state: "${{ job.status }}",
               context: context.workflow,
               target_url: "${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}",
               description: "${{ steps.result-message.outputs.message }}",
             });
       - uses: actions/github-script@v7
-        if: ${{ success() }}
-        with:
-          script: |
-            await github.rest.repos.createCommitStatus({
-              owner: context.repo.owner,
-              repo: context.repo.repo,
-              sha: "${{ steps.head.outputs.sha }}",
-              state: "success",
-              context: context.workflow,
-              target_url: "${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}",
-              description: "${{ steps.result-message.outputs.message }}",
-            });
-      - uses: actions/github-script@v7
-        if: ${{ !success() && !failure() }}
+        if: ${{ !failure() && !success() }}
         with:
           script: |
             await github.rest.repos.createCommitStatus({
@@ -93,5 +82,5 @@ jobs:
               state: "error",
               context: context.workflow,
               target_url: "${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}",
-              description: "${{ steps.result-message.outputs.message }}",
+              description: "${{ steps.result-message.outputs.message }} ${{ job.status }}",
             });
