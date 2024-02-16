@@ -64,6 +64,7 @@ jobs:
             await github.rest.repos.checks.update({
               owner: context.repo.owner,
               repo: context.repo.repo,
+              sha: "${{ steps.head.outputs.sha }}",
               check_run_id: "${{ steps.check.outputs.result }}",
               status: "completed",
               conclusion: "failure",
@@ -73,7 +74,7 @@ jobs:
         with:
           debug: true
           script: |
-            const check = await github.rest.repos.createCommitStatus({
+            const check = await github.rest.checks.update({
               owner: context.repo.owner,
               repo: context.repo.repo,
               check_run_id: "${{ steps.check.outputs.result }}",
@@ -85,7 +86,7 @@ jobs:
         with:
           debug: true
           script: |
-            const check = await github.rest.repos.createCommitStatus({
+            const check = await github.rest.checks.update({
               owner: context.repo.owner,
               repo: context.repo.repo,
               check_run_id: "${{ steps.check.outputs.result }}",
