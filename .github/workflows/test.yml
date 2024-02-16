@@ -44,6 +44,7 @@ jobs:
               repo: context.repo.repo,
               sha: "${{ github.head_ref || github.event.pull_request.head.sha  }}",
               state: "failure",
+              context: context.workflow,
               target_url: "${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}",
             });
       - uses: actions/github-script@v7
@@ -56,6 +57,7 @@ jobs:
               repo: context.repo.repo,
               sha: "${{ github.head_ref || github.event.pull_request.head.sha  }}",
               state: "success",
+              context: context.workflow,
               target_url: "${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}",
             });
       - uses: actions/github-script@v7
@@ -68,5 +70,6 @@ jobs:
               repo: context.repo.repo,
               sha: "${{ github.head_ref || github.event.pull_request.head.sha  }}",
               state: "error",
+              context: context.workflow,
               target_url: "${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}",
             });
