@@ -48,7 +48,7 @@ jobs:
         run: |
           printf 'timestamp=%(%s)T\n' >> "${GITHUB_OUTPUT}"
 
-      - run: echo test
+      - run: echo test ; sleep 2
 
       - id: result-message
         run: |
