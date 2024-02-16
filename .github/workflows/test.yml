@@ -57,40 +57,13 @@ jobs:
           echo "message=${duration}s" >> "${GITHUB_OUTPUT}"
 
       - uses: actions/github-script@v7
-        if: ${{ failure() }}
         with:
           script: |
             await github.rest.repos.createCommitStatus({
               owner: context.repo.owner,
               repo: context.repo.repo,
               sha: "${{ steps.head.outputs.sha }}",
-              state: "failure",
-              context: context.workflow,
-              target_url: "${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}",
-              description: "${{ steps.result-message.outputs.message }}",
-            });
-      - uses: actions/github-script@v7
-        if: ${{ success() }}
-        with:
-          script: |
-            await github.rest.repos.createCommitStatus({
-              owner: context.repo.owner,
-              repo: context.repo.repo,
-              sha: "${{ steps.head.outputs.sha }}",
-              state: "success",
-              context: context.workflow,
-              target_url: "${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}",
-              description: "${{ steps.result-message.outputs.message }}",
-            });
-      - uses: actions/github-script@v7
-        if: ${{ !success() && !failure() }}
-        with:
-          script: |
-            await github.rest.repos.createCommitStatus({
-              owner: context.repo.owner,
-              repo: context.repo.repo,
-              sha: "${{ steps.head.outputs.sha }}",
-              state: "error",
+              state: "${{ job.status }}",
               context: context.workflow,
               target_url: "${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}",
               description: "${{ steps.result-message.outputs.message }}",
