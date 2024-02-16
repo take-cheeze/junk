@@ -17,6 +17,8 @@ jobs:
         !contains(github.event.comment.body, '/test skip')
       )
     runs-on: ubuntu-latest
+    permissions:
+      statuses: write
     steps:
       - uses: actions/github-script@v7
         if: ${{ inputs.check }}
