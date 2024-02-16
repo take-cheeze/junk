@@ -22,7 +22,6 @@ jobs:
     runs-on: ubuntu-latest
     permissions:
       statuses: write
-      checks: write
     steps:
       - id: head
         env:
