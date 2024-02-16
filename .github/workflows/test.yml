@@ -23,6 +23,8 @@ jobs:
     permissions:
       statuses: write
     steps:
+      - id: head
+        run: echo "sha=${{ github.after || github.head_ref || github.event.pull_request.head.sha  }}" >> "${GITHUB_OUTPUT}"
       - uses: actions/github-script@v7
         with:
           debug: true
@@ -30,7 +32,7 @@ jobs:
             const check = await github.rest.repos.createCommitStatus({
               owner: context.repo.owner,
               repo: context.repo.repo,
-              sha: "${{ github.head_ref || github.event.pull_request.head.sha  }}",
+              sha: "${{ steps.head.outputs.sha }}",
               state: "pending",
               context: context.workflow,
               target_url: "${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}",
@@ -45,7 +47,7 @@ jobs:
             const check = await github.rest.repos.createCommitStatus({
               owner: context.repo.owner,
               repo: context.repo.repo,
-              sha: "${{ github.head_ref || github.event.pull_request.head.sha  }}",
+              sha: "${{ steps.head.outputs.sha }}",
               state: "failure",
               context: context.workflow,
               target_url: "${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}",
@@ -58,7 +60,7 @@ jobs:
             const check = await github.rest.repos.createCommitStatus({
               owner: context.repo.owner,
               repo: context.repo.repo,
-              sha: "${{ github.head_ref || github.event.pull_request.head.sha  }}",
+              sha: "${{ steps.head.outputs.sha }}",
               state: "success",
               context: context.workflow,
               target_url: "${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}",
@@ -71,7 +73,7 @@ jobs:
             const check = await github.rest.repos.createCommitStatus({
               owner: context.repo.owner,
               repo: context.repo.repo,
-              sha: "${{ github.head_ref || github.event.pull_request.head.sha  }}",
+              sha: "${{ steps.head.outputs.sha }}",
               state: "error",
               context: context.workflow,
               target_url: "${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}",
