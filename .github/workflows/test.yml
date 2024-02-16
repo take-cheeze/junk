@@ -50,7 +50,6 @@ jobs:
           printf 'timestamp=%(%s)T\n' >> "${GITHUB_OUTPUT}"
 
       - run: echo test ; sleep 2
-      - run: exit 1
 
       - id: result-message
         if: ${{ always() }}
