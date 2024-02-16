@@ -25,7 +25,14 @@ jobs:
       checks: write
     steps:
       - id: head
-        run: echo "sha=${{ github.event.after || github.head_ref || github.event.pull_request.head.sha  }}" >> "${GITHUB_OUTPUT}"
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          if [ "${{ github.event_name }}" = issue_comment ] ; then
+            echo "sha=$(gh api '${{ github.event.issue.pull_request.url }}' | jq -r .head.ref)" >> "${GITHUB_OUTPUT}"
+          else
+            echo "sha=${{ github.event.after || github.head_ref || github.event.pull_request.head.sha  }}" >> "${GITHUB_OUTPUT}"
+          fi
       - uses: actions/github-script@v7
         with:
           script: |
