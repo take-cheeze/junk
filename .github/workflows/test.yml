@@ -63,7 +63,7 @@ jobs:
             await github.rest.repos.checks.update({
               owner: context.repo.owner,
               repo: context.repo.repo,
-              check_run_id: ${{ steps.check.outputs.result }},
+              check_run_id: "${{ steps.check.outputs.result }}",
               status: "completed",
               conclusion: "failure",
             });
@@ -75,7 +75,7 @@ jobs:
             const check = await github.rest.repos.createCommitStatus({
               owner: context.repo.owner,
               repo: context.repo.repo,
-              check_run_id: ${{ steps.check.outputs.result }},
+              check_run_id: "${{ steps.check.outputs.result }}",
               status: "completed",
               conclusion: "success",
             });
@@ -87,7 +87,7 @@ jobs:
             const check = await github.rest.repos.createCommitStatus({
               owner: context.repo.owner,
               repo: context.repo.repo,
-              check_run_id: ${{ steps.check.outputs.result }},
+              check_run_id: "${{ steps.check.outputs.result }}",
               status: "completed",
               conclusion: "neutral",
             });
