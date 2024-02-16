@@ -45,10 +45,10 @@ jobs:
               target_url: "${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}",
             });
 
-      - name: Set start timestamp
-        id: start
+      - id: start
         run: |
           printf 'timestamp=%(%s)T\n' >> "${GITHUB_OUTPUT}"
+
       - run: echo test
 
       - id: result-message
