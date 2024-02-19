@@ -49,7 +49,7 @@ jobs:
           echo "html_url=${html_url}" >> $GITHUB_OUTPUT
       - id: job-url
         run: |
-          echo "url=${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}/jobs/${{ steps.jobid.outputs.job_id }}" >> "${GITHUB_OUTPUT}"
+          echo "url=${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}/job/${{ steps.jobid.outputs.job_id }}" >> "${GITHUB_OUTPUT}"
 
       - uses: actions/github-script@v7
         with:
